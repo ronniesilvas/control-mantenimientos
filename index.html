@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seguimiento de Mantenimientos</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Mantenimientos</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
+  <div id="loginSection">
+    <h2>Iniciar Sesión</h2>
+    <input type="email" id="email" placeholder="Correo">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Ingresar</button>
+    <p id="loginError" class="error"></p>
+  </div>
+
+  <div id="appSection" style="display: none;">
     <h1>Seguimiento de Mantenimientos</h1>
+    <button onclick="logout()">Cerrar Sesión</button>
     <form id="maintenanceForm">
-      <input type="date" id="fecha" required />
-      <input type="text" id="equipo" placeholder="Equipo" required />
+      <input type="date" id="fecha" required>
+      <input type="text" id="equipo" placeholder="Equipo" required>
       <select id="mntto" required>
         <option value="PM">PM</option>
         <option value="CO">CO</option>
       </select>
-      <input type="text" id="detalle" placeholder="Detalle" required />
+      <input type="text" id="detalle" placeholder="Detalle" required>
       <button type="submit">Agregar Mantenimiento</button>
     </form>
-
-    <input type="text" id="filtroEquipo" placeholder="Filtrar por equipo..." />
+    <input type="text" id="filtroEquipo" placeholder="Filtrar por equipo">
     <button id="exportar">Exportar CSV</button>
-
     <table id="maintenanceTable">
       <thead>
         <tr>
@@ -35,7 +42,9 @@
       <tbody></tbody>
     </table>
   </div>
+
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
   <script src="script.js"></script>
 </body>
