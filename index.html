@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Mantenimientos</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seguimiento de Mantenimientos</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="container">
     <h1>Seguimiento de Mantenimientos</h1>
     <form id="maintenanceForm">
-        <input type="date" id="fecha" required>
-        <input type="text" id="equipo" placeholder="Equipo" required>
-        <select id="mntto" required>
-            <option value="PM">PM</option>
-            <option value="CO">CO</option>
-        </select>
-        <input type="text" id="detalle" placeholder="Detalle" required>
-        <button type="submit">Agregar Mantenimiento</button>
+      <input type="date" id="fecha" required />
+      <input type="text" id="equipo" placeholder="Equipo" required />
+      <select id="mntto" required>
+        <option value="PM">PM</option>
+        <option value="CO">CO</option>
+      </select>
+      <input type="text" id="detalle" placeholder="Detalle" required />
+      <button type="submit">Agregar Mantenimiento</button>
     </form>
+
+    <input type="text" id="filtroEquipo" placeholder="Filtrar por equipo..." />
+    <button id="exportar">Exportar CSV</button>
+
     <table id="maintenanceTable">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Equipo</th>
-                <th>MTTO</th>
-                <th>Detalle</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Equipo</th>
+          <th>MTTO</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     </table>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-    <script src="script.js"></script>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
