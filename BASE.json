@@ -1,0 +1,24 @@
+{
+    "usuarios": {
+      "userId1": {
+        "correo": "usuario1@example.com",
+        "nombre": "Juan Perez",
+        "rol": "admin"
+      }
+    },
+    "equipos": {
+      "equipoId1": {
+        "nombre": "Camión 01",
+        "tipo": "Camión"
+      }
+    },
+    "mantenimientos": {
+      "mantenimientoId1": {
+        "equipoId": "equipoId1",
+        "fecha": "2025-04-01",
+        "mntto": "PM",
+        "detalle": "Cambio de aceite"
+      }
+    }
+  }
+  

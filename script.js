@@ -1,104 +1,61 @@
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Inicializar Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBLGzaeqqam1MhdaNBa4jL8X3pFgAxq7BE",
-  authDomain: "control-mantto.firebaseapp.com",
-  databaseURL: "https://control-mantto-default-rtdb.firebaseio.com",
-  projectId: "control-mantto",
-  storageBucket: "control-mantto.firebasestorage.app",
-  messagingSenderId: "634547171528",
-  appId: "1:634547171528:web:8a20ee90fe01819178b5fd",
-  measurementId: "G-ER6CBY2J3Y"
+  apiKey: "AIzaSyCxSJ519rvPSpLjBI6xrvitAqjKe2MeP6E",
+  authDomain: "control-de-mantenimientos.firebaseapp.com",
+  databaseURL: "https://control-de-mantenimientos-default-rtdb.firebaseio.com",
+  projectId: "control-de-mantenimientos",
+  storageBucket: "control-de-mantenimientos.firebasestorage.app",
+  messagingSenderId: "769592271383",
+  appId: "1:769592271383:web:922cc59c6fe4466689f252",
+  measurementId: "G-Q03BV9X9CJ"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 const db = firebase.database();
 const auth = firebase.auth();
 
-const form = document.getElementById('maintenanceForm');
-const filtroEquipo = document.getElementById('filtroEquipo');
-const exportarBtn = document.getElementById('exportar');
-const loginSection = document.getElementById('loginSection');
-const appSection = document.getElementById('appSection');
-
-function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      loginSection.style.display = 'none';
-      appSection.style.display = 'block';
-      loadMaintenance();
-    })
-    .catch((error) => {
-      document.getElementById('loginError').textContent = error.message;
+// Cargar equipos desde Firebase
+function loadEquipos() {
+  const equipoSelect = document.getElementById('equipo');
+  db.ref('equipos').on('value', (snapshot) => {
+    equipoSelect.innerHTML = ''; // Limpiar opciones previas
+    snapshot.forEach((childSnapshot) => {
+      const equipo = childSnapshot.val();
+      const option = document.createElement('option');
+      option.value = childSnapshot.key;  // El ID único del equipo
+      option.textContent = equipo.nombre;
+      equipoSelect.appendChild(option);
     });
-}
-
-function logout() {
-  auth.signOut().then(() => {
-    loginSection.style.display = 'block';
-    appSection.style.display = 'none';
   });
 }
 
-form.addEventListener('submit', function(e) {
+// Agregar equipo a Firebase
+function addEquipo(nombre, tipo) {
+  const equipoRef = db.ref('equipos').push();  // push() genera un ID único
+  equipoRef.set({
+    nombre: nombre,
+    tipo: tipo
+  });
+}
+
+// Agregar mantenimiento a Firebase
+document.getElementById('maintenanceForm').addEventListener('submit', function(e) {
   e.preventDefault();
+  
   const fecha = document.getElementById('fecha').value;
-  const equipo = document.getElementById('equipo').value;
+  const equipoId = document.getElementById('equipo').value;
   const mntto = document.getElementById('mntto').value;
   const detalle = document.getElementById('detalle').value;
-  db.ref('mantenimientos').push({ fecha, equipo, mntto, detalle });
-  form.reset();
-});
 
-function loadMaintenance(filtro = '') {
-  db.ref('mantenimientos').on('value', (snapshot) => {
-    const data = snapshot.val();
-    const tbody = document.querySelector('#maintenanceTable tbody');
-    tbody.innerHTML = '';
-    for (let key in data) {
-      const registro = data[key];
-      if (!filtro || registro.equipo.toLowerCase().includes(filtro.toLowerCase())) {
-        const row = `<tr>
-          <td>${registro.fecha}</td>
-          <td>${registro.equipo}</td>
-          <td>${registro.mntto}</td>
-          <td>${registro.detalle}</td>
-        </tr>`;
-        tbody.innerHTML += row;
-      }
-    }
+  // Guardar el mantenimiento en la base de datos
+  const mantenimientoRef = db.ref('mantenimientos').push();
+  mantenimientoRef.set({
+    equipoId: equipoId,
+    fecha: fecha,
+    mntto: mntto,
+    detalle: detalle
   });
-}
-
-filtroEquipo.addEventListener('input', () => {
-  loadMaintenance(filtroEquipo.value);
-});
-
-exportarBtn.addEventListener('click', () => {
-  db.ref('mantenimientos').once('value').then((snapshot) => {
-    const data = snapshot.val();
-    let csv = 'Fecha,Equipo,MTTO,Detalle\n';
-    for (let key in data) {
-      const r = data[key];
-      csv += `${r.fecha},${r.equipo},${r.mntto},${r.detalle}\n`;
-    }
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'mantenimientos.csv');
-    a.click();
-  });
-});
-
-auth.onAuthStateChanged(user => {
-  if (user) {
-    loginSection.style.display = 'none';
-    appSection.style.display = 'block';
-    loadMaintenance();
-  } else {
-    loginSection.style.display = 'block';
-    appSection.style.display = 'none';
-  }
 });

@@ -1,19 +1,20 @@
 // Inicializar Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBLGzaeqqam1MhdaNBa4jL8X3pFgAxq7BE",
-  authDomain: "control-mantto.firebaseapp.com",
-  databaseURL: "https://control-mantto-default-rtdb.firebaseio.com",
-  projectId: "control-mantto",
-  storageBucket: "control-mantto.firebasestorage.app",
-  messagingSenderId: "634547171528",
-  appId: "1:634547171528:web:8a20ee90fe01819178b5fd",
-  measurementId: "G-ER6CBY2J3Y"
+  apiKey: "AIzaSyCxSJ519rvPSpLjBI6xrvitAqjKe2MeP6E",
+  authDomain: "control-de-mantenimientos.firebaseapp.com",
+  databaseURL: "https://control-de-mantenimientos-default-rtdb.firebaseio.com",
+  projectId: "control-de-mantenimientos",
+  storageBucket: "control-de-mantenimientos.firebasestorage.app",
+  messagingSenderId: "769592271383",
+  appId: "1:769592271383:web:922cc59c6fe4466689f252",
+  measurementId: "G-Q03BV9X9CJ"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
-const auth = firebase.auth();
-
+// Autenticación
 document.getElementById('loginForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const email = document.getElementById('correo').value;
@@ -21,10 +22,10 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 
   auth.signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      // Redirigir a la página principal
+      // Redirige a la página principal
       window.location.href = "index.html";
     })
     .catch((error) => {
-      document.getElementById('mensajeError').textContent = "Error al iniciar sesión: " + error.message;
+      document.getElementById('mensajeError').textContent = "Error: " + error.message;
     });
 });
